@@ -8,22 +8,82 @@ To write a program to implement the the Logistic Regression Using Gradient Desce
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1. 
-2. 
-3. 
-4. 
+1. Initialize the model parameters (weights and bias) with small values and set the learning rate.
+
+2. Compute the predicted output using the sigmoid function for the given input features.
+
+3. Calculate the loss (error) and update the weights and bias using gradient descent.
+
+4. Repeat the update process until convergence, then use the trained model for prediction.
+
 
 ## Program:
 ```
 /*
 Program to implement the the Logistic Regression Using Gradient Descent.
-Developed by: 
-RegisterNumber:  
+Developed by: SRI SAI SARAN G
+RegisterNumber: 212225220103 
 */
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+
+data = pd.read_csv("C:/Users/91908/Downloads/Placement_Data (1).csv")
+
+data['status'] = data['status'].map({'Placed': 1, 'Not Placed': 0})
+
+X = data[['ssc_p', 'mba_p']].values
+y = data['status'].values
+
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+m = len(y)
+X = np.c_[np.ones(m), X]
+
+def sigmoid(z):
+    return 1 / (1 + np.exp(-z))
+
+def cost_function(X, y, theta):
+    h = sigmoid(X @ theta)
+    return (-1/m) * np.sum(y*np.log(h) + (1-y)*np.log(1-h))
+
+
+
+
+theta = np.zeros(X.shape[1])
+alpha = 0.1
+cost_history = []
+
+for i in range(500):
+    z = X @ theta
+    h = sigmoid(z)
+    gradient = (1/m) * X.T @ (h - y)
+    theta = theta - alpha * gradient
+    
+    cost = cost_function(X, y, theta)
+    cost_history.append(cost)
+
+y_pred = (sigmoid(X @ theta) >= 0.5).astype(int)
+
+accuracy = np.mean(y_pred == y) * 100
+print("Weights:", theta)
+print("Accuracy:", accuracy, "%")
+
+plt.figure()
+plt.plot(cost_history)
+plt.xlabel("Iterations")
+plt.ylabel("Cost")
+plt.title("Logistic Regression using Gradient Descent")
+plt.show()
+
+
 ```
 
 ## Output:
-![logistic regression using gradient descent](sam.png)
+<img width="1087" height="106" alt="546020053-950a4045-103d-462e-8b6a-04de930b4246" src="https://github.com/user-attachments/assets/c60c3f80-e20b-4f7e-9263-a696deb1e716" />
+<img width="1091" height="588" alt="546020472-5af781fb-7323-45f9-a440-3b41d16954d6" src="https://github.com/user-attachments/assets/5e49245e-b731-4499-a9b4-08757db14a29" />
 
 
 ## Result:
